@@ -1,42 +1,30 @@
 package main
 
 import (
+	"cdk/backend"
+	"cdk/config"
+	"cdk/rds"
+	"cdk/vpc"
+
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+
 	// "github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
-	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 )
 
-type CdkStackProps struct {
-	awscdk.StackProps
-}
-
-func NewCdkStack(scope constructs.Construct, id string, props *CdkStackProps) awscdk.Stack {
-	var sprops awscdk.StackProps
-	if props != nil {
-		sprops = props.StackProps
-	}
-	stack := awscdk.NewStack(scope, &id, &sprops)
-
-	// The code that defines your stack goes here
-
-	// example resource
-	// queue := awssqs.NewQueue(stack, jsii.String("CdkQueue"), &awssqs.QueueProps{
-	// 	VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
-	// })
-
-	return stack
-}
-
 func main() {
 	defer jsii.Close()
-
-	app := awscdk.NewApp(nil)
-
-	NewCdkStack(app, "CdkStack", &CdkStackProps{
-		awscdk.StackProps{
-			Env: env(),
-		},
+	app := awscdk.NewApp(&awscdk.AppProps{})
+	vpc := vpc.NewStackVPC(app, "VPC", &vpc.VpcStackProps{
+		StackProps: awscdk.StackProps{Env: env()},
+	})
+	backend.NewBackendStack(app, "BE", &backend.BackendStackProps{
+		StackProps: awscdk.StackProps{Env: env()},
+		// Vpc:        vpc,
+	})
+	rds.NewRdsMySqlClusterStack(app, "RDS", &rds.RdsPostgreSQLClusterStackProps{
+		StackProps: awscdk.StackProps{Env: env()},
+		Vpc:        vpc,
 	})
 
 	app.Synth(nil)
@@ -45,11 +33,16 @@ func main() {
 // env determines the AWS environment (account+region) in which our stack is to
 // be deployed. For more information see: https://docs.aws.amazon.com/cdk/latest/guide/environments.html
 func env() *awscdk.Environment {
+	account := config.CDK_DEFAULT_ACCOUNT
+	region := config.CDK_DEFAULT_REGION
 	// If unspecified, this stack will be "environment-agnostic".
 	// Account/Region-dependent features and context lookups will not work, but a
 	// single synthesized template can be deployed anywhere.
 	//---------------------------------------------------------------------------
-	return nil
+	return &awscdk.Environment{
+		Account: jsii.String(account),
+		Region:  jsii.String(region),
+	}
 
 	// Uncomment if you know exactly what account and region you want to deploy
 	// the stack to. This is the recommendation for production stacks.
