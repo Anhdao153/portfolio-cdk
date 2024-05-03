@@ -3,12 +3,11 @@ package main
 import (
 	"cdk/backend"
 	"cdk/config"
+	"cdk/frontend"
 	"cdk/rds"
 	"cdk/vpc"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
-
-	// "github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
 	"github.com/aws/jsii-runtime-go"
 )
 
@@ -26,7 +25,9 @@ func main() {
 		StackProps: awscdk.StackProps{Env: env()},
 		Vpc:        vpc,
 	})
-
+	frontend.NewFrontendStacks(app, "FE", &frontend.FrontendStackProps{
+		StackProps: awscdk.StackProps{Env: env()},
+	})
 	app.Synth(nil)
 }
 
