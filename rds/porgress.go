@@ -32,7 +32,8 @@ func NewRdsMySqlClusterStack(scope constructs.Construct, id string, props *RdsPo
 		VpcSubnets: &awsec2.SubnetSelection{
 			SubnetType: awsec2.SubnetType_PUBLIC,
 		},
-		MultiAz: jsii.Bool(false),
+		AllocatedStorage: jsii.Number(20),
+		MultiAz:          jsii.Bool(false),
 	})
 	return stack
 }
