@@ -29,7 +29,7 @@ func NewBackendStack(scope constructs.Construct, id string, props *BackendStackP
 	})
 	api := apiGateWayV2.NewHttpApi(stack, jsii.String("NEST-API"), &apiGateWayV2.HttpApiProps{
 		CorsPreflight: &apiGateWayV2.CorsPreflightOptions{
-			AllowOrigins:     &[]*string{jsii.String("http://localhost:3000"), jsii.String("https://d2wi3kgkf6kepl.cloudfront.net")},
+			AllowOrigins:     &[]*string{jsii.String("http://localhost:3000"), jsii.String("https://profile.nguyenducthien.net")},
 			AllowMethods:     &[]apiGateWayV2.CorsHttpMethod{apiGateWayV2.CorsHttpMethod_ANY},
 			AllowHeaders:     &[]*string{jsii.String("*")},
 			AllowCredentials: jsii.Bool(true),
