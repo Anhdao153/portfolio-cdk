@@ -38,6 +38,13 @@ func NewFrontendStacks(scope constructs.Construct, id string, props *FrontendSta
 			{
 				HttpStatus:         jsii.Number(404),
 				ResponseHttpStatus: jsii.Number(200),
+				Ttl:                awscdk.Duration_Seconds(jsii.Number(10)),
+				ResponsePagePath:   jsii.String("/index.html"),
+			},
+			{
+				HttpStatus:         jsii.Number(403),
+				ResponseHttpStatus: jsii.Number(200),
+				Ttl:                awscdk.Duration_Seconds(jsii.Number(10)),
 				ResponsePagePath:   jsii.String("/index.html"),
 			},
 		},

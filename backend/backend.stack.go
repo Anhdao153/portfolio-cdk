@@ -25,11 +25,12 @@ func NewBackendStack(scope constructs.Construct, id string, props *BackendStackP
 		Code: awslambda.DockerImageCode_FromImageAsset(jsii.String(config.SOURCE_BE), &awslambda.AssetImageCodeProps{
 			AssetName: jsii.String("portfolioLambda"),
 		}),
+		Timeout: awscdk.Duration_Millis(jsii.Number(30000)),
 		// Vpc: props.Vpc,
 	})
 	api := apiGateWayV2.NewHttpApi(stack, jsii.String("NEST-API"), &apiGateWayV2.HttpApiProps{
 		CorsPreflight: &apiGateWayV2.CorsPreflightOptions{
-			AllowOrigins:     &[]*string{jsii.String("http://localhost:3000"), jsii.String("https://profile.nguyenducthien.net")},
+			AllowOrigins:     &[]*string{jsii.String("http://localhost:3000"), jsii.String("https://" + config.WEB_DOMAIN)},
 			AllowMethods:     &[]apiGateWayV2.CorsHttpMethod{apiGateWayV2.CorsHttpMethod_ANY},
 			AllowHeaders:     &[]*string{jsii.String("*")},
 			AllowCredentials: jsii.Bool(true),
